@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.bImportKeys).setOnClickListener(v -> {
             Log.d("lustig", "import keys");
-            saveKey("dougs secrete key actually got stored wow");
+            saveKey("savinhg a new key here if this works -- would ya look at thag");
         });
 
 
