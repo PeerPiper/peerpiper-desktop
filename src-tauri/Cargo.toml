@@ -21,7 +21,7 @@ tauri = { version = "1.2.4", features = [] }
 tokio = { version = "1.26.0", features = ["full"] }
 tracing = "0.1.37"
 tracing-subscriber = "0.3.16"
-libp2peasy = { path = "../../../RUST-projects/libp2peasy" }
+libp2peasy = { path = "../../RUST-projects/libp2peasy" }
 bytes = "1"
 
 [features]
