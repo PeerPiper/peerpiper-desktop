@@ -2,9 +2,9 @@
 name = "peerpiper-app"
 version = "0.1.0"
 description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+authors = ["DougAnderson444"]
+license = "MIT"
+repository = "https://github.com/PeerPiper/peerpiper-native"
 default-run = "peerpiper-app"
 edition = "2021"
 rust-version = "1.59"
