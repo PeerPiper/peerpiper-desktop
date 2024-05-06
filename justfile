@@ -27,5 +27,7 @@ install_ollama_windows:
   unzip ollama-windows-amd64.zip
 
   # Tauri needs this specific name
-  mv ollama-windows-amd64 src-tauri\ollama-x86_64-pc-windows-msvc.exe
+  mv ollama.exe src-tauri\ollama-x86_64-pc-windows-msvc.exe
+  # mv all the *.dll files too, they can keep the same name
+  mv *.dll src-tauri
 
