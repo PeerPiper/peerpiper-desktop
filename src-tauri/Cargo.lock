@@ -3530,23 +3530,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "01cda141df6706de531b6c46c3a33ecca755538219bd484262fa09410c13539c"
 
 [[package]]
-name = "local-llama"
-version = "0.1.0"
-dependencies = [
- "dirs",
- "futures",
- "log",
- "ollama-rs",
- "peerpiper",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-log",
- "tokio",
-]
-
-[[package]]
 name = "lock_api"
 version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4431,6 +4414,23 @@ dependencies = [
  "thiserror",
  "tracing",
  "wnfs-common",
+]
+
+[[package]]
+name = "peerpiper-desktop"
+version = "0.1.0"
+dependencies = [
+ "dirs",
+ "futures",
+ "log",
+ "ollama-rs",
+ "peerpiper",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-log",
+ "tokio",
 ]
 
 [[package]]

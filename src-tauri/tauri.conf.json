@@ -7,7 +7,7 @@
 		"distDir": "../build"
 	},
 	"package": {
-		"productName": "Local llama",
+		"productName": "PeerPiper.io Desktop",
 		"version": "0.1.0"
 	},
 	"tauri": {
@@ -47,7 +47,7 @@
 				"icons/icon.icns",
 				"icons/icon.ico"
 			],
-			"identifier": "local-llama",
+			"identifier": "peerpiper-desktop",
 			"longDescription": "",
 			"macOS": {
 				"entitlements": null,
@@ -76,7 +76,7 @@
 				"fullscreen": false,
 				"height": 600,
 				"resizable": true,
-				"title": "Local llama",
+				"title": "PeerPiper.io Desktop",
 				"width": 800
 			}
 		]
