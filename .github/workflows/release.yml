@@ -28,6 +28,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+          targets: x86_64-apple-darwin, aarch64-apple-darwin
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
@@ -35,12 +41,6 @@ jobs:
 
       # casey/just systems
       - uses: extractions/setup-just@v1
-
-      - name: install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-          targets: aarch64-apple-darwin, x86_64-apple-darwin
 
       - name: Install ollama on Windows
         if: matrix.platform == 'windows-latest'
