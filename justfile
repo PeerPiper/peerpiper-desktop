@@ -23,9 +23,13 @@ install_ollama_macos:
 
 install_ollama_windows:
   echo "Installing ollama on Windows"
-  curl -O https://github.com/ollama/ollama/releases/download/{{version}}/ollama-windows-amd64.zip
-  unzip ollama-windows-amd64.zip
+  # curl -O https://github.com/ollama/ollama/releases/download/{{version}}/ollama-windows-amd64.zip
+  $client = new-object System.Net.WebClient
+  $client.DownloadFile("https://github.com/ollama/ollama/releases/download/{{version}}/ollama-windows-amd64.zip", "ollama-windows-amd64.zip")
+  # PowerShell unzip ollama-windows-amd64.zip
+  Expand-Archive -Path ollama-windows-amd64.zip -DestinationPath .
 
   # Tauri needs this specific name
-  move ollama-windows-amd64 src-tauri\ollama-x86_64-pc-windows-msvc.exe
+  # PowerShell move ollama-windows-amd64 to src-tauri\ollama-x86_64-pc-windows-msvc.exe
+  Move-Item -Path ollama-windows-amd64.exe -Destination src-tauri\ollama-x86_64-pc-windows-msvc.exe
 
