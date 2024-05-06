@@ -44,7 +44,6 @@ jobs:
 
       - name: Install ollama on Windows
         if: matrix.platform == 'windows-latest'
-        shell: pwsh
         run: just install_ollama_windows
 
       - name: Install ollama on MacOS
