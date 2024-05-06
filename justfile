@@ -23,7 +23,6 @@ install_ollama_macos:
 
 install_ollama_windows:
   echo "Installing ollama on Windows"
-  # curl -O https://github.com/ollama/ollama/releases/download/{{version}}/ollama-windows-amd64.zip
   $client = new-object System.Net.WebClient
   $client.DownloadFile("https://github.com/ollama/ollama/releases/download/{{version}}/ollama-windows-amd64.zip", "ollama-windows-amd64.zip")
   # PowerShell unzip ollama-windows-amd64.zip
