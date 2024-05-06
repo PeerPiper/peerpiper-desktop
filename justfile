@@ -23,8 +23,9 @@ install_ollama_macos:
 
 install_ollama_windows:
   echo "Installing ollama on Windows"
-  wget https://github.com/ollama/ollama/releases/download/{{version}}/ollama-windows-amd64.zip
+  curl -O https://github.com/ollama/ollama/releases/download/{{version}}/ollama-windows-amd64.zip
   unzip ollama-windows-amd64.zip
+
   # Tauri needs this specific name
-  mv ollama-windows-amd64 src-tauri/ollama-x86_64-pc-windows-msvc.exe
+  move ollama-windows-amd64 src-tauri\ollama-x86_64-pc-windows-msvc.exe
 
