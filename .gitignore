@@ -8,5 +8,4 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-src-tauri/cert.pem
-src-tauri/local_keypair
+src-tauri/ollama-x86_64-unknown-linux-gnu

@@ -1,31 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-	html,
-	body {
-		@apply text-neutral-800;
-		/* @apply bg-gradient-to-tr to-stone-500 from-stone-700; */
-		/* @apply bg-gradient-to-t from-slate-500 to-slate-300; */
-		@apply bg-gradient-to-t to-slate-100 from-slate-200;
-		/* @apply bg-gradient-to-t to-emerald-500 from-green-600; */
-		/* @apply bg-gradient-to-t from-neutral-400  to-green-400; */
-		/* @apply bg-[conic-gradient(at_top,_var(--tw-gradient-stops))] from-transparent via-neutral-500 to-transparent; */
-	}
-	h1 {
-		@apply text-3xl w-full;
-	}
-	h2 {
-		@apply text-2xl;
-	}
-	h3 {
-		@apply text-lg;
-	}
-	h4 {
-		@apply text-base;
-	}
-	p {
-		@apply mt-2;
-	}
-}
