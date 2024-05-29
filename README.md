@@ -25,7 +25,7 @@ The power of a native app for desktop, built with:
 
 - [x] Linux
 - [ ] MacOS
-- [ ] Windows
+- [x] Windows
 - [x] 🌐 Android (Via web browser to your node runnign at home)
 - [x] 🌐 iOS (Via web browser to your node running at home)
 
