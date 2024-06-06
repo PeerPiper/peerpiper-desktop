@@ -4,7 +4,7 @@ Your data node, complete with private personal AI Large Language Model.
 
 True Native DWeb:
 
-- [x] Connect to your own node from home, web, or mobile (libp2peasy + WebRTC)
+- [x] Connect to your own node from home, web, or mobile (libp2p + WebRTC)
 - [x] Store your data to your own device (Tauri)
 - [x] Remotely run Large Language Models (LLMs) privately on your own device
 
@@ -25,7 +25,7 @@ The power of a native app for desktop, built with:
 
 - [x] Linux
 - [ ] MacOS
-- [ ] Windows
+- [x] Windows
 - [x] 🌐 Android (Via web browser to your node runnign at home)
 - [x] 🌐 iOS (Via web browser to your node running at home)
 

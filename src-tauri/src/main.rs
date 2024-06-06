@@ -1,17 +1,19 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use futures::channel::oneshot;
 use futures::stream::StreamExt;
 use futures::SinkExt;
 use log::{debug, info};
 use ollama_rs::{generation::completion::request::GenerationRequest, Ollama};
-use peerpiper::core::events::{NetworkEvent, PeerPiperCommand};
+use peerpiper::core::events::{Events, PeerPiperCommand, PublicEvent};
+use peerpiper::core::libp2p::api::Libp2pEvent;
 use std::collections::HashMap;
 
 use std::sync::{Arc, Mutex};
 
 use tauri::api::process::{Command, CommandEvent};
-// use tauri::async_runtime::block_on;
+use tauri::async_runtime::block_on;
 use tauri::async_runtime::Mutex as AsyncMutex;
 use tauri::Manager;
 use tauri::State;
@@ -63,6 +65,8 @@ async fn tauri_init_command(
 
     Ok(())
 }
+
+/// Streams the generated responses.
 #[tauri::command(rename_all = "snake_case")]
 async fn start_chat(
     question: String,
@@ -94,7 +98,7 @@ async fn start_chat(
 
         match res {
             Ok(responses) => {
-                // info!("responses: {:?}", responses);
+                info!("responses: {:?}", responses);
                 for resp in responses {
                     let _ = async_proc_input_tx
                         .send(Signal::ChatToken(resp.response))
@@ -111,6 +115,31 @@ async fn start_chat(
     chat_finished(&app_handle);
 
     Ok(())
+}
+
+/// Like start_chat, but generates only one response synchronously
+async fn single_response(
+    question: String,
+    context: String,
+    connection: tauri::State<'_, DbConnection>,
+) -> Result<String, String> {
+    info!("{}", question);
+
+    let mut temp = connection.llama.lock().await;
+    let llama3 = temp.as_mut().unwrap();
+
+    let model = "llama3:latest".to_string();
+    // only use context if context is not empty
+    let prompt = question.to_string();
+
+    info!("prompt: {:?}", prompt);
+
+    let generation_request = GenerationRequest::new(model, prompt);
+    let res = llama3.generate(generation_request).await.unwrap();
+
+    info!("responses: {:?}", res.response);
+
+    Ok(res.response)
 }
 
 #[tauri::command(rename_all = "snake_case")]
@@ -140,7 +169,7 @@ fn main() {
     let (async_proc_output_tx, mut async_proc_output_rx) = mpsc::channel(1);
 
     // I/O with the peerpiper node
-    let (pp_tx, mut pp_rx) = futures::channel::mpsc::channel::<NetworkEvent>(8);
+    let (pp_tx, mut pp_rx) = futures::channel::mpsc::channel::<Events>(8);
     let (mut commander, command_receiver) = futures::channel::mpsc::channel::<PeerPiperCommand>(8);
 
     let log = tauri_plugin_log::Builder::default()
@@ -149,7 +178,7 @@ fn main() {
             LogTarget::Stdout,
             LogTarget::Webview,
         ])
-        .level(log::LevelFilter::Debug);
+        .level(log::LevelFilter::Info);
 
     let (ollama_port, _child) = spawn_ollama("ollama");
 
@@ -167,16 +196,23 @@ fn main() {
             // The app does not work started from a graphical shell, because it starts in `/` by default
             env::set_current_dir(dirs::home_dir().unwrap()).unwrap();
 
+            let app_handle = app.handle();
+
             // Setup the async chat
             tauri::async_runtime::spawn(async move {
                 async_process_model(async_proc_input_rx, async_proc_output_tx).await
             });
 
+            let (tx_client, rx_client) = oneshot::channel();
+
             tauri::async_runtime::spawn(async move {
-                peerpiper::start(pp_tx, command_receiver).await.unwrap();
+                peerpiper::start(pp_tx, command_receiver, tx_client).await.unwrap();
             });
 
-            let app_handle = app.handle();
+            // block on rx_client to get the client handle
+            let mut client_handle = block_on(async { rx_client.await.unwrap() });
+            let app_clone = app_handle.clone();
+
             tauri::async_runtime::spawn(async move {
                 // loop over select of 
                 // 1) if let Some(event) = pp_rx.next().await {
@@ -185,14 +221,22 @@ fn main() {
                     tokio::select! {
                         Some(event) = pp_rx.next() => {
                             match event {
-                                NetworkEvent::ConnectionClosed { peer, cause } => {
+                                Events::Outer(PublicEvent::ConnectionClosed { peer, cause }) => {
                                     info!("ConnectionClosed: {:?} {:?}", peer, cause);
                                     app_handle.emit_all("connectionClosed", peer).unwrap();
                                 }
-                                NetworkEvent::ListenAddr { address, .. } => {
+                                Events::Outer(PublicEvent::ListenAddr { address, .. }) => {
                                     app_handle.emit_all("serverMultiaddr", address.to_string()).unwrap();
                                 }
-                                // TODO: Handle LLM Generation requests from the network
+                                // Handle LLM Generation requests from the network
+                                Events::Inner(Libp2pEvent::InboundRequest {request, channel }) => {
+                                    info!("InboundRequest: {:?}", request);
+                                    let db_state = app_clone.state::<DbConnection>();
+                                    if let Ok(res) = single_response(request, "".to_string(), db_state).await {
+                                        let file = res.into_bytes();
+                                        client_handle.respond_file(file, channel).await;
+                                    }
+                                }
                                 _ => {}
                             }
                         }
@@ -206,7 +250,7 @@ fn main() {
                                         .map_err(|e| e.to_string());
 
                                     let address: String = loop {
-                                        if let Some(NetworkEvent::ListenAddr { address, .. }) = pp_rx.next().await {
+                                        if let Some(Events::Outer(PublicEvent::ListenAddr { address, .. })) = pp_rx.next().await {
                                             break address.to_string();
                                         }
                                     };

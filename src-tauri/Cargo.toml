@@ -24,7 +24,7 @@ log = "0.4.19"
 futures = { version = "0.3.28", default-features = false }
 tauri-plugin-log = { git = "https://github.com/lencx/tauri-plugins-workspace", branch = "dev", features = ["colored"] }
 dirs = "5.0.1"
-peerpiper = { git = "https://github.com/PeerPiper/peerpiper.git", rev = "bd9499e444c57340e4483d822cbadc0f48e19332" }
+peerpiper = { git = "https://github.com/PeerPiper/peerpiper.git", rev = "3998fcf6e134ef82dd6dad248db231f58068bd8c" }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
