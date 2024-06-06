@@ -47,7 +47,7 @@
 				"icons/icon.icns",
 				"icons/icon.ico"
 			],
-			"identifier": "local-llama",
+			"identifier": "peerpiper-desktop",
 			"longDescription": "",
 			"macOS": {
 				"entitlements": null,
