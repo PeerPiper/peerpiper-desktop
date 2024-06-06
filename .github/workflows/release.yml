@@ -35,6 +35,7 @@ jobs:
         with:
           # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
           targets: x86_64-apple-darwin, aarch64-apple-darwin
+          components: rust-lld
 
       - name: setup node
         uses: actions/setup-node@v4
