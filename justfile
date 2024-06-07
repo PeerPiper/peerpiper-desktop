@@ -1,6 +1,7 @@
 # use just.systems variable for the ollama version
 ollama_version := "v0.1.33"
-release_version := $(shell cat src-tauri/tauri.conf.json | jq -r '.package.version')
+# release_version := $(shell jq -r '.tauri.version' tauri.conf.json)
+release_version := `cat src-tauri/tauri.conf.json | jq -r '.package.version'`
 
 tauri:
   npm run tauri dev
@@ -32,8 +33,12 @@ install_ollama_windows:
   # mv all the *.dll files too, they can keep the same name
   mv *.dll src-tauri
 
+get_release_version:
+  cat src-tauri/tauri.conf.json | jq -r '.package.version'
+
 # Release using the release branch and a git tag with the same version as in tauri.conf.json
 release:
+  echo "Releasing {{release_version}}"
   git checkout release
   git pull
   git merge master
