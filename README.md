@@ -50,3 +50,12 @@ npm run tauri dev
 # or using just.systems:
 just tauri
 ```
+
+## Release Process
+
+- Update the version in the `tauri.conf.json` file. 
+- Run the following command to merge into the release branch, create tag and push to the remote repository:
+
+```bash
+just release
+```
