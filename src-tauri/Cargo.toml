@@ -2,7 +2,7 @@
 name = "peerpiper-desktop"
 version = "0.1.0"
 description = "PeerPiper Desktop"
-authors = ["Doug Anderon"]
+authors = ["Doug Anderson <doug@peerpiper.io>"]
 license = ""
 repository = ""
 default-run = "peerpiper-desktop"
