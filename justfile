@@ -42,5 +42,5 @@ release:
   git push
   # Tag for versions need to start with v
   git tag -a v{{release_version}} -m "Release v{{release_version}}"
-  git push origin {{release_version}}
+  git push origin v{{release_version}}
   git checkout master
