@@ -40,6 +40,7 @@ release:
   git pull
   git merge master
   git push
-  git tag -a {{release_version}} -m "Release {{release_version}}"
+  # Tag for versions need to start with v
+  git tag -a v{{release_version}} -m "Release v{{release_version}}"
   git push origin {{release_version}}
   git checkout master
