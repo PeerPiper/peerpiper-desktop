@@ -8,7 +8,7 @@
 	},
 	"package": {
 		"productName": "PeerPiper.io Desktop",
-		"version": "0.1.0"
+		"version": "0.1.8-alpha"
 	},
 	"tauri": {
 		"allowlist": {
