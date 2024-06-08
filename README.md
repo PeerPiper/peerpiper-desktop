@@ -53,8 +53,8 @@ just tauri
 
 ## Release Process
 
-- Update the version in the `tauri.conf.json` file. 
-- Run the following command to merge into the release branch, create tag and push to the remote repository:
+- Update the version in the [`tauri.conf.json`](./src-tauri/tauri.conf.json) file. 
+- Run the following command to merge into the release branch, create a new version tag and push to the remote repository:
 
 ```bash
 just release
