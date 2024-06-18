@@ -27,7 +27,7 @@ The power of a native app for desktop, built with:
 - [x] Windows
 - [x] MacOS Apple Silicon
 - [ ] MacOS Intel x86_64 🤕 (unfriendly target)
-- [x] 🌐 Android (Via web browser to your node runnign at home)
+- [x] 🌐 Android (Via web browser to your node running at home)
 - [x] 🌐 iOS (Via web browser to your node running at home)
 
 ## Building
