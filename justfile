@@ -1,5 +1,5 @@
 # use just.systems variable for the ollama version
-ollama_version := "v0.1.33"
+ollama_version := "v0.3.2"
 # release_version := $(shell jq -r '.tauri.version' tauri.conf.json)
 release_version := `cat src-tauri/tauri.conf.json | jq -r '.package.version'`
 
