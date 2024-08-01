@@ -35,6 +35,9 @@ use tauri_plugin_log::LogTarget;
 // This package
 mod utils;
 
+/// The model constant being used (llama3.1)
+const MODEL: &str = "llama3.1:latest";
+
 /// The various output types that this app can generate.
 enum Signal {
     ChatToken(String),
@@ -83,15 +86,13 @@ async fn start_chat(
     let mut temp = connection.llama.lock().await;
     let llama3 = temp.as_mut().unwrap();
 
-    let model = "llama3:latest".to_string();
-
     let mut prompt = question.to_string();
     if !context.is_empty() {
         prompt = format!("{} Answer based on this context: {}", question, context);
     }
 
 
-    let generation_request = GenerationRequest::new(model, prompt);
+    let generation_request = GenerationRequest::new(MODEL.to_string(), prompt);
     let mut stream = llama3.generate_stream(generation_request).await.unwrap();
     while let Some(res) = stream.next().await {
         let async_proc_input_tx = state.inner.lock().await;
@@ -133,13 +134,15 @@ async fn single_response(
     let mut temp = connection.llama.lock().await;
     let llama3 = temp.as_mut().unwrap();
 
-    let model = "llama3:latest".to_string();
     // only use context if context is not empty
-    let prompt = question.to_string();
+    let mut prompt = question.to_string();
+    if !context.is_empty() {
+        prompt = format!("{} Answer based on this context: {}", question, context);
+    }
 
     info!("prompt: {:?}", prompt);
 
-    let generation_request = GenerationRequest::new(model, prompt);
+    let generation_request = GenerationRequest::new(MODEL.to_string(), prompt);
     let res = llama3.generate(generation_request).await.unwrap();
 
     info!("responses: {:?}", res.response);
@@ -401,11 +404,10 @@ mod tests {
         // By default it will connect to localhost:11434
         let ollama = Ollama::default();
 
-        let model = "llama3:latest".to_string();
         let prompt = "Why is the sky blue?".to_string();
 
         let res = ollama
-            .generate(GenerationRequest::new(model, prompt))
+            .generate(GenerationRequest::new(MODEL.to_string(), prompt))
             .await
             .unwrap();
         eprintln!("{}", res.response);
