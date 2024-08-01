@@ -12,9 +12,10 @@ True Native DWeb:
 
 The power of a native app for desktop, built with:
 
-- [x] Tauri
-- [x] Svelte-Kit and Vite
-- [x] TailwindCSS
+- [x] [Tauri](https://tauri.app/)
+- [x] [Svelte-Kit](https://kit.svelte.dev/) and [Vite](https://vitejs.dev/)
+- [x] [TailwindCSS](https://tailwindcss.com/)
+- [x] [Just](https://just.systems/)
 
 ## Stretch Goals
 
@@ -32,7 +33,7 @@ The power of a native app for desktop, built with:
 
 ## Building
 
-To build yourself, ensure you install ollama executable first:
+To build yourself, ensure you [just](https://just.systems) install ollama executable first:
 
 ```bash
 just install_ollama
