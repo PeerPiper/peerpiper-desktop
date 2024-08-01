@@ -15,8 +15,8 @@ use std::sync::{Arc, Mutex};
 use tauri::api::process::{Command, CommandEvent};
 use tauri::async_runtime::block_on;
 use tauri::async_runtime::Mutex as AsyncMutex;
-use tauri::Manager;
 use tauri::State;
+use tauri::{Manager, WindowEvent};
 
 use std::env;
 use tokio::sync::mpsc;
@@ -84,7 +84,12 @@ async fn start_chat(
     let llama3 = temp.as_mut().unwrap();
 
     let model = "llama3:latest".to_string();
-    let prompt = format!("{} Answer based on this context: {}", question, context);
+
+    let mut prompt = question.to_string();
+    if !context.is_empty() {
+        prompt = format!("{} Answer based on this context: {}", question, context);
+    }
+
 
     let generation_request = GenerationRequest::new(model, prompt);
     let mut stream = llama3.generate_stream(generation_request).await.unwrap();
@@ -179,8 +184,8 @@ fn main() {
             LogTarget::Webview,
         ])
         .level(log::LevelFilter::Info);
-
-    let (ollama_port, _child) = spawn_ollama("ollama");
+ 
+    let (ollama_port, _child) = spawn_ollama();
 
     tauri::Builder::default()
         .manage(DbConnection {
@@ -214,9 +219,6 @@ fn main() {
             let app_clone = app_handle.clone();
 
             tauri::async_runtime::spawn(async move {
-                // loop over select of 
-                // 1) if let Some(event) = pp_rx.next().await {
-                // 2) if let Some(output) = async_proc_output_rx.recv().await
                 loop {
                     tokio::select! {
                         Some(event) = pp_rx.next() => {
@@ -227,6 +229,11 @@ fn main() {
                                 }
                                 Events::Outer(PublicEvent::ListenAddr { address, .. }) => {
                                     app_handle.emit_all("serverMultiaddr", address.to_string()).unwrap();
+                                }
+                                Events::Outer(PublicEvent::Message { peer, topic, data}) => {
+                                    info!("Message: {:?} {:?}", peer, topic);
+                                    
+                                    // TODO: Process data through WIT components loaded by the user
                                 }
                                 // Handle LLM Generation requests from the network
                                 Events::Inner(Libp2pEvent::InboundRequest {request, channel }) => {
@@ -302,9 +309,10 @@ fn extract_ollama_port(line: String) -> Option<String> {
     }
 }
 
-fn spawn_ollama(ollama_name: &str) -> (u16, tauri::api::process::CommandChild) {
+fn spawn_ollama() -> (u16, tauri::api::process::CommandChild) {
     // Setup ollama
     let mut ollama_port: u16 = 0;
+    let ollama_name = "ollama";
 
     info!("Starting Ollama");
     let host = "127.0.0.1:0".to_string();
@@ -332,7 +340,7 @@ fn spawn_ollama(ollama_name: &str) -> (u16, tauri::api::process::CommandChild) {
     }
 
     info!("The ollama_port is definitely {:?}", ollama_port);
-    println!("The ollama_port is definitely {:?}", ollama_port);
+    println!("This ollama_port is definitely {:?}", ollama_port);
 
     // keep the program running
     tauri::async_runtime::spawn(async move {
