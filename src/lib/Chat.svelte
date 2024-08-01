@@ -71,9 +71,6 @@
 	<div class="flex flex-col w-full">
 		<div class="flex flex-shrink-0 pr-6 border-b border-gray-200 h-14 pl-3 md:pl-5 lg:pl-9">
 			<div class="flex items-center font-semibold ms-2">PeerPiper.io Chat</div>
-			<div class="flex items-center ms-auto">
-				<button class="bg-red-500 text-white px-4 py-2 rounded shadow-md font-semibold">X</button>
-			</div>
 		</div>
 	</div>
 	<!-- Chat -->

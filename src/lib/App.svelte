@@ -21,7 +21,7 @@
 
 			ollamaPort = event.payload as number;
 			console.log('pulling llama3', `http://127.0.0.1:${ollamaPort}`);
-			const command = Command.sidecar('ollama', ['pull', 'llama3'], {
+			const command = Command.sidecar('ollama', ['pull', 'llama3.1'], {
 				env: {
 					OLLAMA_HOST: `http://127.0.0.1:${ollamaPort}`
 				}
@@ -69,6 +69,6 @@
 		<Spinner />
 	</div>
 {:else}
-	<!-- <Chat /> -->
+	<Chat />
 	<NodeControl />
 {/if}
