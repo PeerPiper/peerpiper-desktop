@@ -4817,6 +4817,9 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-log",
  "tokio",
+ "tracing",
+ "tracing-log",
+ "tracing-subscriber",
 ]
 
 [[package]]
